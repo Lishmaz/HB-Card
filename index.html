@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Per Topita</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e6f2ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #f5d2a5;
+            border: 3px solid #b38867;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.5s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backface-visibility: hidden;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background-color: #e9c496;
+            border-bottom: 2px solid #b38867;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transition: transform 0.8s ease;
+        }
+
+        .envelope-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            border-top: 2px solid #b38867;
+            background-color: #f5d2a5;
+        }
+
+        .envelope-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 52%;
+            height: 50%;
+            background-color: #e9c496;
+            clip-path: polygon(0 0, 100% 100%, 0 100%);
+            border-right: 1px solid #b38867;
+        }
+
+        .envelope-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 52%;
+            height: 50%;
+            background-color: #e9c496;
+            clip-path: polygon(100% 0, 0 100%, 100% 100%);
+            border-left: 1px solid #b38867;
+        }
+
+        .flap-open {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-text {
+            font-size: 42px;
+            font-weight: bold;
+            color: #884a39;
+            z-index: 2;
+            font-family: 'Brush Script MT', cursive;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+        }
+
+        .letter {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateY(100%);
+            width: 650px;
+            height: 950px;
+            background-color: #fffaf0;
+            border: 1px solid #ccc;
+            padding: 40px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: transform 1s ease, opacity 1s ease;
+            z-index: -1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .letter-visible {
+            transform: translate(-50%, -50%);
+            opacity: 1;
+            z-index: 10;
+        }
+
+        .letter-content {
+            font-size: 22px;
+            line-height: 1.8;
+            color: #333;
+            text-align: left;
+            white-space: pre-line;
+            font-family: 'Georgia', serif;
+        }
+
+        .letter-content p {
+            margin-bottom: 20px;
+        }
+
+        .letter-content .signature {
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        .letter-content .ps {
+            margin-top: 30px;
+            font-size: 20px;
+            color: #555;
+        }
+
+        .envelope-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .arrow-up {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 20px solid #884a39;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .arrow-visible {
+            opacity: 1;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 70px;
+            height: 85px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px dashed #b38867;
+            border-radius: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #884a39;
+            transform: rotate(5deg);
+            z-index: 3;
+        }
+
+        .stamp-design {
+            width: 55px;
+            height: 70px;
+            border: 1px solid #b38867;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-front">
+                <div class="envelope-flap" id="flap"></div>
+                <div class="envelope-bottom"></div>
+                <div class="envelope-left"></div>
+                <div class="envelope-right"></div>
+                <div class="stamp">
+                    <div class="stamp-design">♥</div>
+                </div>
+                <div class="envelope-text">Per Topita</div>
+            </div>
+        </div>
+        <div class="letter" id="letter">
+            <div class="letter-content">
+Non dirò che stai invecchiando ma forse è ora di iniziare a leggere le etichette degli integratori.
+
+La verità è che oggi più che mai vorrei essere lì con te.
+Mi manchi in un modo che non si dice a voce alta, ma che si sente in ogni dettaglio. Tutto qua sa di te.
+
+Anche se siamo lontani, oggi sono con te. Lo sarò sempre.
+
+Ti amo — più di quanto riesca a scrivere su un biglietto.
+
+E ricordati: 29 non è vecchia, ma è sicuramente più vecchia.
+
+PS. Non mi piace regalarti cose che non usi quindi spero che il regalo ti piaccia, è da un po' di tempo che dici che la batteria dura poco quindi spero ti possano essere utili visto che le usi tantissimo.
+            </div>
+        </div>
+        <div class="arrow-up" id="arrow"></div>
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+        const envelope = document.getElementById('envelope');
+        const flap = document.getElementById('flap');
+        const letter = document.getElementById('letter');
+        const arrow = document.getElementById('arrow');
+        
+        let isOpening = false;
+        let isFullyOpen = false;
+        
+        container.addEventListener('click', () => {
+            if (isFullyOpen) {
+                // Quando la lettera è completamente visibile, un altro click la nasconde
+                letter.classList.remove('letter-visible');
+                envelope.classList.remove('envelope-hidden');
+                flap.classList.remove('flap-open');
+                isFullyOpen = false;
+                isOpening = false;
+                return;
+            }
+            
+            if (isOpening) return;
+            
+            isOpening = true;
+            
+            // Passo 1: Apri il lembo della busta
+            flap.classList.add('flap-open');
+            
+            // Passo 2: Mostra la freccia che indica che la lettera sta per uscire
+            setTimeout(() => {
+                arrow.classList.add('arrow-visible');
+            }, 600);
+            
+            // Passo 3: Fai uscire la lettera
+            setTimeout(() => {
+                letter.classList.add('letter-visible');
+                arrow.classList.remove('arrow-visible');
+            }, 1000);
+            // Passo 4: Nascondi la busta quando la lettera è completamente visibile
+            setTimeout(() => {
+                envelope.classList.add('envelope-hidden');
+                isFullyOpen = true;
+                isOpening = false;
+            }, 2500);
+        });
+    </script>
+</body>
+</html>
