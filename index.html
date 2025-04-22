@@ -22,6 +22,8 @@
             height: 400px;
             perspective: 1000px;
             cursor: pointer;
+            max-width: 90vw;
+            max-height: 60vh;
         }
 
         .envelope {
@@ -124,6 +126,9 @@
             transition: transform 1s ease, opacity 1s ease;
             z-index: -1;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 90vw;
+            max-height: 85vh;
+            overflow-y: auto;
         }
 
         .letter-visible {
@@ -206,6 +211,69 @@
             align-items: center;
             font-size: 28px;
         }
+
+        /* Media queries per rendere il design responsive */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 90vw;
+                height: 60vw;
+                max-height: 50vh;
+            }
+            
+            .envelope-text {
+                font-size: 28px;
+            }
+            
+            .stamp {
+                width: 50px;
+                height: 60px;
+                top: 15px;
+                right: 15px;
+            }
+            
+            .stamp-design {
+                width: 40px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .letter {
+                padding: 25px;
+            }
+            
+            .letter-content {
+                font-size: 18px;
+                line-height: 1.6;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .envelope-text {
+                font-size: 24px;
+            }
+            
+            .stamp {
+                width: 40px;
+                height: 50px;
+                top: 10px;
+                right: 10px;
+            }
+            
+            .stamp-design {
+                width: 32px;
+                height: 42px;
+                font-size: 16px;
+            }
+            
+            .letter {
+                padding: 20px;
+            }
+            
+            .letter-content {
+                font-size: 16px;
+                line-height: 1.5;
+            }
+        }
     </style>
 </head>
 <body>
@@ -272,13 +340,14 @@ PS. Non mi piace regalarti cose che non usi quindi spero che il regalo ti piacci
             // Passo 2: Mostra la freccia che indica che la lettera sta per uscire
             setTimeout(() => {
                 arrow.classList.add('arrow-visible');
-            }, 600);
+            }, 800);
             
             // Passo 3: Fai uscire la lettera
             setTimeout(() => {
                 letter.classList.add('letter-visible');
                 arrow.classList.remove('arrow-visible');
-            }, 1000);
+            }, 1700);
+            
             // Passo 4: Nascondi la busta quando la lettera è completamente visibile
             setTimeout(() => {
                 envelope.classList.add('envelope-hidden');
